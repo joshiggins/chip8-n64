@@ -92,7 +92,7 @@ int main(void)
 	char otest;
 
 	// load in the rom from dfs
-	int dfp = dfs_open("particles.ch8");
+	int dfp = dfs_open("blinky.ch8");
 	int fsize = dfs_size(dfp);
 
 	int fload = dfs_read(memory+512, 1, fsize, dfp);
@@ -182,22 +182,22 @@ int main(void)
 						pc += 2;
 						break;
 
-					case 0x001: // 8XY1 Sets VX to VX or VY
+					case 0x0001: // 8XY1 Sets VX to VX or VY
 						V[(opcode & 0x0F00) >> 8] = V[(opcode & 0x0F00) >> 8] | V[(opcode & 0x00F0) >> 4];
 						pc += 2;
 						break;
 
-					case 0x002: // 8XY2 Sets VX to VX and VY
+					case 0x0002: // 8XY2 Sets VX to VX and VY
 						V[(opcode & 0x0F00) >> 8] = V[(opcode & 0x0F00) >> 8] & V[(opcode & 0x00F0) >> 4];
 						pc += 2;
 						break;
 
-					case 0x003: // 8XY3 Sets VX to VX xor VY
+					case 0x0003: // 8XY3 Sets VX to VX xor VY
 						V[(opcode & 0x0F00) >> 8] = V[(opcode & 0x0F00) >> 8] ^ V[(opcode & 0x00F0) >> 4];
 						pc += 2;
 						break;
 
-					case 0x004: // 8XY4 Adds VY to VX. VF is set to 1 when there's a carry, and to 0 when there isn't
+					case 0x0004: // 8XY4 Adds VY to VX. VF is set to 1 when there's a carry, and to 0 when there isn't
 						if (__builtin_add_overflow(V[(opcode & 0x00F0) >> 4], V[(opcode & 0x0F00) >> 8], &otest)) {
 							// overflow
 							V[0xF] = 1;
@@ -210,7 +210,7 @@ int main(void)
 						pc += 2;
 						break;
 
-					case 0x005: // 8XY5 VY is subtracted from VX. VF is set to 0 when there's a borrow, and 1 when there isn't
+					case 0x0005: // 8XY5 VY is subtracted from VX. VF is set to 0 when there's a borrow, and 1 when there isn't
 						if (__builtin_sub_overflow(V[(opcode & 0x00F0) >> 4], V[(opcode & 0x0F00) >> 8], &otest)) {
 							// overflow
 							V[0xF] = 1;
@@ -223,13 +223,13 @@ int main(void)
 						pc += 2;
 						break;
 
-					case 0x006: // 8XY6 Shifts VX right by one. VF is set to the value of the least significant bit of VX before the shift
+					case 0x0006: // 8XY6 Shifts VX right by one. VF is set to the value of the least significant bit of VX before the shift
 						V[0xF] = V[(opcode & 0x0F00) >> 8] & 7;
 						V[(opcode & 0x0F00) >> 8] = V[(opcode & 0x0F00) >> 8] >> 1;
 						pc += 2;
 						break;
 
-					case 0x007: // 8XY7 Sets VX to VY minus VX. VF is set to 0 when there's a borrow, and 1 when there isn't
+					case 0x0007: // 8XY7 Sets VX to VY minus VX. VF is set to 0 when there's a borrow, and 1 when there isn't
 						if (__builtin_sub_overflow(V[(opcode & 0x00F0) >> 4], V[(opcode & 0x0F00) >> 8], &otest)) {
 							// overflow
 							V[0xF] = 1;
@@ -242,7 +242,7 @@ int main(void)
 						pc += 2;
 						break;
 
-					case 0x00E: // 8XYE Shifts VX left by one. VF is set to the value of the most significant bit of VX before the shift
+					case 0x000E: // 8XYE Shifts VX left by one. VF is set to the value of the most significant bit of VX before the shift
 						V[0xF] = V[(opcode & 0x0F00) >> 8] >> 7;
 						V[(opcode & 0x0F00) >> 8] = V[(opcode & 0x0F00) >> 8] << 1;
 						pc += 2;
