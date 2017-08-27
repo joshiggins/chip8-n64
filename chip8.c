@@ -168,6 +168,11 @@ int main(void)
 				V[(opcode & 0x0F00) >> 8] = opcode & 0x00FF;
 				pc += 2;
 				break;
+				
+			case 0x7000: // 7XNN: Adds NN to VX
+				V[(opcode & 0x0F00) >> 8] += (opcode & 0x00FF);
+				pc += 2;
+				break;
 
 			default:
 				cpu_running = 0;
