@@ -92,7 +92,7 @@ int main(void)
 	char otest;
 
 	// load in the rom from dfs
-	int dfp = dfs_open("blinky.ch8");
+	int dfp = dfs_open("invaders.ch8");
 	int fsize = dfs_size(dfp);
 
 	int fload = dfs_read(memory+512, 1, fsize, dfp);
@@ -198,12 +198,10 @@ int main(void)
 						break;
 
 					case 0x0004: // 8XY4 Adds VY to VX. VF is set to 1 when there's a carry, and to 0 when there isn't
-						if (__builtin_add_overflow(V[(opcode & 0x00F0) >> 4], V[(opcode & 0x0F00) >> 8], &otest)) {
-							// overflow
-							V[0xF] = 1;
-						} else {
-							// no overflow
+						if(((int)V[(opcode & 0x0F00) >> 8 ] + (int)V[(opcode & 0x00F0) >> 4]) < 256) {
 							V[0xF] &= 0;
+						} else {
+							V[0xF] = 1;
 						}
 						// add
 						V[(opcode & 0x0F00) >> 8] += V[(opcode & 0x00F0) >> 4];
@@ -211,11 +209,9 @@ int main(void)
 						break;
 
 					case 0x0005: // 8XY5 VY is subtracted from VX. VF is set to 0 when there's a borrow, and 1 when there isn't
-						if (__builtin_sub_overflow(V[(opcode & 0x00F0) >> 4], V[(opcode & 0x0F00) >> 8], &otest)) {
-							// overflow
+						if(((int)V[(opcode & 0x0F00) >> 8 ] - (int)V[(opcode & 0x00F0) >> 4]) >= 0) {
 							V[0xF] = 1;
 						} else {
-							// no overflow
 							V[0xF] &= 0;
 						}
 						// subtract
@@ -230,11 +226,9 @@ int main(void)
 						break;
 
 					case 0x0007: // 8XY7 Sets VX to VY minus VX. VF is set to 0 when there's a borrow, and 1 when there isn't
-						if (__builtin_sub_overflow(V[(opcode & 0x00F0) >> 4], V[(opcode & 0x0F00) >> 8], &otest)) {
-							// overflow
+						if(((int)V[(opcode & 0x0F00) >> 8] - (int)V[(opcode & 0x00F0) >> 4]) > 0) {
 							V[0xF] = 1;
 						} else {
-							// no overflow
 							V[0xF] &= 0;
 						}
 						// subtract
@@ -309,7 +303,7 @@ int main(void)
 
 					case 0x0001: // EXA1: Skips the next instruction if the key stored in VX isn't pressed
 						// keys not implemented yet
-						pc += 2;
+						pc += 4;
 						break;
 
 					default:
@@ -328,7 +322,7 @@ int main(void)
 
 					case 0x000A: // FX0A: A key press is awaited, and then stored in VX
 						// keys not implemented yet
-						pc += 2;
+						//pc += 2;
 						break;
 
 					case 0x0015: // FX15: Sets the delay timer to VX
