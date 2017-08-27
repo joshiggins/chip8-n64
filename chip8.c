@@ -206,7 +206,7 @@ int main(void)
 							V[0xF] &= 0;
 						}
 						// add
-						V[(opcode & 0x0F00) >> 8] += V[(opcode & 0x00F0) >> 8];
+						V[(opcode & 0x0F00) >> 8] += V[(opcode & 0x00F0) >> 4];
 						pc += 2;
 						break;
 
@@ -219,7 +219,7 @@ int main(void)
 							V[0xF] &= 0;
 						}
 						// subtract
-						V[(opcode & 0x0F00) >> 8] -= V[(opcode & 0x00F0) >> 8];
+						V[(opcode & 0x0F00) >> 8] -= V[(opcode & 0x00F0) >> 4];
 						pc += 2;
 						break;
 
@@ -238,7 +238,7 @@ int main(void)
 							V[0xF] &= 0;
 						}
 						// subtract
-						V[(opcode & 0x0F00) >> 8] = V[(opcode & 0x00F0) >> 8] - V[(opcode & 0x0F00) >> 8];
+						V[(opcode & 0x0F00) >> 8] = V[(opcode & 0x00F0) >> 4] - V[(opcode & 0x0F00) >> 8];
 						pc += 2;
 						break;
 
