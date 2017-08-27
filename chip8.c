@@ -92,7 +92,7 @@ int main(void)
 	char otest;
 
 	// load in the rom from dfs
-	int dfp = dfs_open("invaders.ch8");
+	int dfp = dfs_open("blinky.ch8");
 	int fsize = dfs_size(dfp);
 
 	int fload = dfs_read(memory+512, 1, fsize, dfp);
@@ -375,6 +375,8 @@ int main(void)
 				cpu_running = 0;
 		}
 
+		if (screen_damage == 1) {
+
 		// draw the screen
 		while( !(disp = display_lock()) );
 		graphics_fill_screen( disp, 0 );
@@ -398,7 +400,6 @@ int main(void)
 		//	graphics_draw_box(disp, 20 + i, 70, 1, 20, graphics_make_color(i, i, i, 255));
         	//}
 
-		if (screen_damage == 1) {
 			for(int h = 0; h < 32; h++) {
 				for(int w = 0; w < 64; w++) {
 					pixel_color = graphics[w+h*64] ? graphics_make_color(255,255,255,255) : graphics_make_color(0,0,0,255);
@@ -408,8 +409,9 @@ int main(void)
 				}
 			}
 		screen_damage = 0;
-		}
 		display_show(disp);
+
+		}
 
 		// update timers
 		if (delay_timer > 0) {
