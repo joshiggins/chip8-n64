@@ -67,12 +67,29 @@ int main(void)
 	// the chip 8 cpu starts here
 
 	// clear the stack, registers, graphics, memory
-	memset(graphics, 0, sizeof(graphics));
-	memset(stack, 0, sizeof(stack));
-	memset(V, 0, sizeof(V));
-	memset(memory, 0, sizeof(memory));
+	void secure_memzero(void *buf, size_t len) {
+    volatile unsigned char *p = buf;
+    while (len--) {
+        *p++ = 0;
+    }
+}
 
-	// program counter starts at 0x200
+int main() {
+    unsigned char stack[SIZE];
+    int V[SIZE];
+    char memory[SIZE];
+
+    // securely overwrite sensitive information in the buffers
+    secure_memzero(graphics, sizeof(graphics));
+    secure_memzero(stack, sizeof(stack));
+    secure_memzero(V, sizeof(V));
+    secure_memzero(memory, sizeof(memory));
+
+    // program counter starts at 0x200
+    // code continues...
+    
+    return 0;
+}
 	pc = 0x200;
 
 	// reset opcode
